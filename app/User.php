@@ -47,9 +47,5 @@ class User extends Authenticatable
         return $this->hasMany(Admin::class , 'idUser') ;
     }
 
-    public function test_git_hub()
-    {
-        return "git_hub" ;
-    }
 
 }
