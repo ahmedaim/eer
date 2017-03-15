@@ -43,8 +43,13 @@ class User extends Authenticatable
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function admins()
+
     {
+        if(1 == 2){
+
+        }
         return $this->hasMany(Admin::class , 'idUser') ;
+
     }
 
 
