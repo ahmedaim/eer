@@ -46,5 +46,5 @@ class User extends Authenticatable
     {
         return $this->hasMany(Admin::class , 'idUser') ;
     }
-
+// test git hub
 }
