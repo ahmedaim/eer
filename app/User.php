@@ -45,7 +45,7 @@ class User extends Authenticatable
     public function admins()
 
     {
-        if(1 == 2){
+        if(1 == 3){
 
         }
         return $this->hasMany(Admin::class , 'idUser') ;
