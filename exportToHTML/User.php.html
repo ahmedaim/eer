@@ -1,0 +1,82 @@
+<html>
+<head>
+<title>User.php</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #353535; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(190,44,35); }
+.s1 { color: rgb(167,219,216); }
+.s2 { color: rgb(199,146,234); }
+.s3 { color: rgb(195,211,222); }
+.s4 { color: rgb(202,211,222); }
+.s5 { color: rgb(255,83,112); }
+.s6 { color: rgb(128,203,196); font-weight: bold; }
+.s7 { color: rgb(195,232,135); }
+.s8 { color: rgb(68,68,68); }
+.s9 { color: rgb(121,129,148); }
+.ls0 { height: 1px; border-width: 0; color: rgb(48,48,48); background-color:rgb(48,48,48)}
+</style>
+</head>
+<BODY BGCOLOR="#212121">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+User.php</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">&lt;?php</span><span class="s1"> 
+ <hr class="ls0"></span><span class="s2">namespace </span><span class="s3">App</span><span class="s1">; 
+ 
+</span><span class="s2">use </span><span class="s3">Illuminate</span><span class="s1">\</span><span class="s3">Notifications</span><span class="s1">\</span><span class="s3">Notifiable</span><span class="s1">; 
+</span><span class="s2">use </span><span class="s3">Illuminate</span><span class="s1">\</span><span class="s3">Foundation</span><span class="s1">\</span><span class="s3">Auth</span><span class="s1">\</span><span class="s3">User </span><span class="s2">as </span><span class="s3">Authenticatable</span><span class="s1">; 
+ <hr class="ls0"></span><span class="s2">class </span><span class="s3">User </span><span class="s2">extends </span><span class="s3">Authenticatable</span><span class="s1"> 
+</span><span class="s4">{</span><span class="s1"> 
+    </span><span class="s2">use </span><span class="s3">Notifiable</span><span class="s1">; 
+ 
+    </span><span class="s2">protected </span><span class="s5">$primaryKey </span><span class="s6">= </span><span class="s7">'id'</span><span class="s1">; 
+ 
+    </span><span class="s8">/** 
+     * The attributes that are mass assignable. 
+     * 
+     * </span><span class="s2">@var </span><span class="s8">array 
+     */</span><span class="s1"> 
+    </span><span class="s2">protected </span><span class="s5">$fillable </span><span class="s6">= </span><span class="s4">[</span><span class="s1"> 
+        </span><span class="s7">'username'</span><span class="s1">, </span><span class="s7">'email'</span><span class="s1">, </span><span class="s7">'password'</span><span class="s1">, 
+    </span><span class="s4">]</span><span class="s1">; 
+ 
+    </span><span class="s8">/** 
+     * The attributes that should be hidden for arrays. 
+     * 
+     * </span><span class="s2">@var </span><span class="s8">array 
+     */</span><span class="s1"> 
+    </span><span class="s2">protected </span><span class="s5">$hidden </span><span class="s6">= </span><span class="s4">[</span><span class="s1"> 
+        </span><span class="s7">'password'</span><span class="s1">, </span><span class="s7">'remember_token'</span><span class="s1">, 
+    </span><span class="s4">]</span><span class="s1">; 
+ 
+    </span><span class="s8">/** 
+     * open request attributes and return new instance 
+     * </span><span class="s2">@param </span><span class="s8">array $attributes 
+     * </span><span class="s2">@return </span><span class="s8">static 
+     */</span><span class="s1"> 
+    </span><span class="s2">public static function </span><span class="s3">open</span><span class="s9">(</span><span class="s2">array </span><span class="s5">$attributes</span><span class="s9">)    </span><span class="s4">{</span><span class="s1"> 
+        </span><span class="s2">return new static</span><span class="s9">(</span><span class="s5">$attributes</span><span class="s9">)</span><span class="s1">; 
+    </span><span class="s4">}</span><span class="s1"> 
+ 
+    </span><span class="s8">/** 
+     *  Get all admins related to specific user 
+     * </span><span class="s2">@return </span><span class="s8">\Illuminate\Database\Eloquent\Relations\HasMany 
+     */</span><span class="s1"> 
+    </span><span class="s2">public function </span><span class="s3">admins</span><span class="s9">()</span><span class="s1"> 
+    </span><span class="s4">{</span><span class="s1"> 
+        </span><span class="s2">return </span><span class="s5">$this</span><span class="s6">-&gt;</span><span class="s3">hasMany</span><span class="s9">(</span><span class="s3">Admin</span><span class="s6">::</span><span class="s2">class </span><span class="s1">, </span><span class="s7">'idUser'</span><span class="s9">) </span><span class="s1">; 
+    </span><span class="s4">}</span><span class="s1"> 
+ 
+    </span><span class="s2">public function </span><span class="s3">test_git_hub</span><span class="s9">()</span><span class="s1"> 
+    </span><span class="s4">{</span><span class="s1"> 
+        </span><span class="s2">return </span><span class="s7">&quot;git_hub&quot; </span><span class="s1">; 
+    </span><span class="s4">}</span><span class="s1"> 
+ 
+</span><span class="s4">}</span><span class="s1"> 
+</span></pre>
+</body>
+</html>
