@@ -20,7 +20,7 @@ class CreateConsultantsTable extends Migration
             $table->string('last_name', 45)->index() ;
             $table->string('username', 45)->index() ;
             $table->bigInteger('idUser')->unsigned();
-            $table->foreign('idUser')->references('id')->on('users')->onDelete('cascade');;
+            $table->foreign('idUser')->references('id')->on('users')->onDelete('no action');;
             $table->boolean('status')->default(1);//1 = active  ,   2 = suspended  , 3 = left the company , 4 = no time slots available
             $table->string('email', 150);
             $table->string('mobile_number', 15)  ;

@@ -24,21 +24,34 @@ class ConsultantRegistrationController extends ApiController
         $this->consultantRegistrationTransformer = $consultantRegistrationTransformer;
     }
 
+    /**
+     * Get all ConsultantRegistration with dynamic limited pagination and dynamic sorting with date
+     * @param Request $request
+     * @return mixed
+     */
     public function index(Request $request)
     {
 
+        // set limit in request or default will be 12
         $limit = $request->limit?(int)$request->limit:12 ;
+
+        // set date order in request or default will be ascending
         $date_order = $request->date_order?$request->date_order:"asc" ;
 
+        // inti query from database
         $consultants = ConsultantRegistration::query();
+
+        // order data with date and return it with pagination
         $consultants = $consultants
             ->orderBy('created_at', $date_order)
             ->paginate($limit) ;
 
+        // if return data equal 0 then return no data respond
         if($consultants->count() == 0){
             return $this->respondNotFound('No data found');
         }
 
+        // commence process successfully with pagination params and Consultant Registration transformer params
         return $this->respondWithPagination($consultants,
             [
                 'consultants' =>  $this->consultantRegistrationTransformer->transformCollection($consultants->all())

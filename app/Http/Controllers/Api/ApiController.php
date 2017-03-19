@@ -55,6 +55,35 @@ class ApiController extends Controller
         return Response::json($data , $status_code , $headers);
     }
 
+    /**
+     * Return
+     * @param $data
+     * @param string $token
+     * @param int $status_code
+     * @return mixed
+     */
+//    public function respondWithToken($data  , $token = '', $status_code = ResponseHttpFoundation::HTTP_ACCEPTED  ){
+//        return Response::json($data , $status_code ,   $token);
+//    }
+
+
+    /**
+     * Return if respond with logged in successfully
+     * @param $message
+     * @param string $token
+     * @param int $status_code
+     * @return mixed
+     */
+    public function loggedInWithToken( $message  , $token = '', $status_code = ResponseHttpFoundation::HTTP_OK  ){
+
+        return $this->respond([
+            'message' => $message,
+            'status_code' => $status_code ,
+            'token' =>$token
+        ], $status_code);
+    }
+
+
     public function respondWithError($message){
         return $this->respond([
             'error' => [
@@ -64,28 +93,66 @@ class ApiController extends Controller
         ]   );
     }
 
-    protected function respondError($message = 'Error' , $status_code = ResponseHttpFoundation::HTTP_EXPECTATION_FAILED)
+    protected function respondError($error_object = 'error' , $message = 'Error' , $status_code = ResponseHttpFoundation::HTTP_EXPECTATION_FAILED)
     {
-        return $this->respond([
-            'message' => $message,
-            'status_code' => $status_code
-        ], $status_code);
+
+        return $this->respond(
+            [
+                $error_object => [
+                    'message' => $message,
+                    'status_code' => $status_code ,
+                    'token' => ''
+                ],
+            ] );
+
+//        return $this->respond(
+//        [
+//            'message' => $message,
+//            'status_code' => $status_code ,
+//            'token' => ''
+//        ], $status_code);
     }
+
 
     /**
      * Return if respond with create row successfully
+     * @param string $object
      * @param string $message
      * @param int $status_code
+     * @param string $token
      * @return mixed
      */
-    protected function respondCreated($message = 'Successfully created' , $status_code = ResponseHttpFoundation::HTTP_CREATED)
+    protected function respondCreated($object = "created" , $message = 'Successfully created' ,
+                                      $status_code = ResponseHttpFoundation::HTTP_CREATED , $token = '')
+    {
+        return $this->respond(
+            [
+                $object => [
+                    'message' => $message,
+                    'status_code' => $status_code ,
+                    'token' => $token
+                ],
+            ] );
+
+    }
+
+
+    /**
+     * Return if respond with create row successfully with token
+     * @param string $message
+     * @param int $status_code
+     * @param string $token
+     * @return mixed
+     */
+    protected function respondCreatedWithToken($message = 'Successfully created' , $token = "",
+                                               $status_code = ResponseHttpFoundation::HTTP_CREATED )
     {
         return $this->respond([
             'message' => $message,
-            'status_code' => $status_code
+            'status_code' => $status_code,
+            'token' => $token
         ], $status_code);
     }
-
 
 
     /**

@@ -45,11 +45,16 @@ class User extends Authenticatable
     public function admins()
 
     {
-        if(1 == 3){
-
-        }
         return $this->hasMany(Admin::class , 'idUser') ;
+    }
 
+    /**
+     *  Get all customers related to specific user
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function customers()
+    {
+        return $this->hasMany(Customer::class , 'idUser') ;
     }
 
 

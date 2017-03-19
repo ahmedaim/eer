@@ -17,20 +17,6 @@ use Illuminate\Support\Facades\Auth;
 //Route::middleware('auth:api')->get('/user', function (Request $request) {
 //    return $request->user();
 //});
-//Route::post('login', 'Auth\LoginController@login');
-//
-//Route::group([
-//    'prefix' => 'restricted',
-//    'middleware' => 'auth:api',
-//], function () {
-//
-//    // Authentication Routes...
-//    Route::get('logout', 'Auth\LoginController@logout');
-//
-//    Route::get('/test', function () {
-//        return 'authenticated';
-//    });
-//});
 
 
 Route::group(['middleware' => 'cors:api'], function () {
@@ -40,6 +26,8 @@ Route::group(['middleware' => 'cors:api'], function () {
 //    Route::get('/consultant_registration/{consultant?}', 'Api\ConsultantRegistrationController@show' );
     Route::resource('/consultant_registration', 'Api\ConsultantRegistrationController');
     Route::get('/consultant_registration_insert_fake_data', 'Api\ConsultantRegistrationController@insert_fake_data' );
+
+    Route::resource('/customers', 'Api\CustomersController');
 
     // Begin Authentication Api
     Route::post('/authenticate', 'Api\AuthenticateController@authenticate');

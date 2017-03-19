@@ -24,9 +24,9 @@ class CreateAdminNotificationsTable extends Migration
 
             $table->integer('idType')   ; // Based on the type - transaction ID will be put into this table
             $table->bigInteger('idAdmin')->unsigned();
-            $table->foreign('idAdmin')->references('id')->on('admins')->onDelete('cascade');
+            $table->foreign('idAdmin')->references('idAdmin')->on('admins')->onDelete('no action');
             $table->bigInteger('idLanguage')->unsigned();
-            $table->foreign('idLanguage')->references('id')->on('languages')->onDelete('cascade');
+            $table->foreign('idLanguage')->references('idLanguage')->on('languages')->onDelete('no action');
             $table->string('text', 200)  ;
             $table->integer('status')   ; //1 = pending to be send to customer , 2 = attempt to send and failed - no retry ,
             //3 = succeed , 4 = retry
