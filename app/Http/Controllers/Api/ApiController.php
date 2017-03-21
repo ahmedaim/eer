@@ -44,10 +44,15 @@ class ApiController extends Controller
     }
 
 
-    public function respondNotFound($message = 'Not Found!' , $status_code = ResponseHttpFoundation::HTTP_NOT_FOUND){
-
-        return $this->setStatusCode($status_code)->respondWithError($message);
-
+    public function respondNotFound($object = 'result' , $message = 'Not Found!' ,
+                                    $status_code = ResponseHttpFoundation::HTTP_NOT_FOUND){
+        return $this->respond(
+            [
+                $object => [
+                    'message' => $message,
+                    'status_code' => $status_code
+                ]
+            ] );
     }
 
 
@@ -69,18 +74,26 @@ class ApiController extends Controller
 
     /**
      * Return if respond with logged in successfully
-     * @param $message
+     * @param string $object
+     * @param string $message
      * @param string $token
      * @param int $status_code
      * @return mixed
      */
-    public function loggedInWithToken( $message  , $token = '', $status_code = ResponseHttpFoundation::HTTP_OK  ){
+    public function loggedInWithToken( $object = "result" , $message = 'Successfully Logged in' , $token = '' ,
+                                       $status_code = ResponseHttpFoundation::HTTP_OK  ){
 
-        return $this->respond([
-            'message' => $message,
-            'status_code' => $status_code ,
-            'token' =>$token
-        ], $status_code);
+        return $this->respond(
+            [
+                $object => [
+                    'message' => $message,
+                    'status_code' => $status_code
+                ],
+                "response" => [
+                    'token' => $token
+                ]
+            ] )->header('status_code', $status_code);
+
     }
 
 
@@ -93,26 +106,71 @@ class ApiController extends Controller
         ]   );
     }
 
-    protected function respondError($error_object = 'error' , $message = 'Error' , $status_code = ResponseHttpFoundation::HTTP_EXPECTATION_FAILED)
+    /**
+     * Return respond  if process failed
+     * @param string $object
+     * @param string $message
+     * @param int $status_code
+     * @return mixed
+     */
+    protected function respondError($object = 'result' , $message = 'process failed' , $status_code = ResponseHttpFoundation::HTTP_EXPECTATION_FAILED)
     {
+
 
         return $this->respond(
             [
-                $error_object => [
+                $object => [
                     'message' => $message,
-                    'status_code' => $status_code ,
-                    'token' => ''
-                ],
-            ] );
+                    'status_code' => $status_code
+                ]
+            ] )->header('status_code', $status_code);
 
-//        return $this->respond(
-//        [
-//            'message' => $message,
-//            'status_code' => $status_code ,
-//            'token' => ''
-//        ], $status_code);
     }
 
+
+    /**
+     * Get all validation errors
+     * @param string $object
+     * @param string $message
+     * @param $inputs_message
+     * @param int $status_code
+     * @return mixed
+     */
+    protected function respondValidationError($object = 'result' ,   $inputs_message   ,
+                                              $status_code = ResponseHttpFoundation::HTTP_EXPECTATION_FAILED)
+    {
+
+        foreach ( $inputs_message->toArray() as $key => $value){
+            if($key == 'first_name') {
+                $input_key = 11;
+            }else if($key == 'last_name'){
+                $input_key = 12;
+            }else if($key == 'email'){
+                $input_key = 13;
+            }else if($key == 'password'){
+                $input_key = 14;
+            }else if($key == 'current_password'){
+                $input_key = 15;
+            }else if($key == 'new_password'){
+                $input_key = 16;
+            }else if($key == 'gender'){
+                $input_key = 17;
+            }else{
+                $input_key = $status_code;
+            }
+            $input_value =  head($value);
+        }
+
+
+
+        return $this->respond(
+            [
+                $object => [
+                    'message' => $input_value,
+                    'status_code' => $input_key ,
+                          ]
+            ] );
+    }
 
     /**
      * Return if respond with create row successfully
@@ -122,18 +180,19 @@ class ApiController extends Controller
      * @param string $token
      * @return mixed
      */
-    protected function respondCreated($object = "created" , $message = 'Successfully created' ,
-                                      $status_code = ResponseHttpFoundation::HTTP_CREATED , $token = '')
+    protected function respondCreated($object = "result" , $message = 'Successfully created' , $token = '' ,
+                                      $status_code = ResponseHttpFoundation::HTTP_CREATED )
     {
         return $this->respond(
             [
                 $object => [
                     'message' => $message,
-                    'status_code' => $status_code ,
-                    'token' => $token
+                    'status_code' => $status_code
                 ],
-            ] );
-
+                "response" => [
+                    'token' => $token
+                ]
+            ] )->header('status_code', $status_code);
     }
 
 

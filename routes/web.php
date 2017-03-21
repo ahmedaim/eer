@@ -19,7 +19,6 @@ Route::get('/', function () {
 Route::group(['prefix' => 'admin' ] ,function () {
 
     Route::get('/', 'DashboardController@index' );
-
     Route::resource('/admins', 'AdminsController');
     Route::get('/admins_insert_fake_data', 'AdminsController@insert_fake_data' );
 
