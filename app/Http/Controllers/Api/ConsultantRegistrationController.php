@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Consultant;
 use App\ConsultantRegistration;
 use App\Http\Acme\Transformers\consultantRegistrationTransformer;
+use App\User;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response as ResponseHttpFoundation;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class ConsultantRegistrationController extends ApiController
 {
@@ -20,7 +24,7 @@ class ConsultantRegistrationController extends ApiController
 
     public function __construct(consultantRegistrationTransformer  $consultantRegistrationTransformer)
     {
-        $this->middleware('jwt.auth'  );
+        $this->middleware('jwt.auth'  , ['except' => ['store'  ]]);
         $this->consultantRegistrationTransformer = $consultantRegistrationTransformer;
     }
 
@@ -68,18 +72,39 @@ class ConsultantRegistrationController extends ApiController
     public function store(Request $request)
     {
 
+
         // Begin Validations
-        $this->consultants_validation($request ,   "create");
+        $validator =   $this->consultants_validation($request ,   "create");
+
+        if ($validator->fails()) {
+
+            // return validation errors response
+            return $this->respondValidationError("result",
+                $validator->errors(0) , ResponseHttpFoundation::HTTP_BAD_REQUEST);
+        }
         // End Validations
 
+
+
+
+
         // Create consultant
-        $consultant_registration = ConsultantRegistration::open($request->all())->save($request->all());
+        $consultant_registration = ConsultantRegistration::create([
+            'first_name' => $request->first_name ,
+            'last_name' => $request->last_name ,
+            'gender' => $request->gender ,
+            'email' => $request->email ,
+            'idCountry_nationality' => $request->idCountry_nationality ,
+            'idCountry_residential' => $request->idCountry_residential ,
+            'about' => $request->about ,
+            'mobile_number' => $request->mobile_number ,
+        ]);
         if($consultant_registration){
             // Process success
-            return $this->respondCreated('Consultant Registered Successfully'  );
+            return $this->respondCreated('result' ,'Consultant Registered Successfully'  );
         }else{
             // Process Fail
-            return $this->respondError('Sorry . Consultant Registration process failed  ');
+            return $this->respondError('result' ,'Sorry . Consultant Registration process failed  ');
         }
 
 
@@ -170,45 +195,87 @@ class ConsultantRegistrationController extends ApiController
     {
         if($method == "update"){
                 // validations for update process
-                $this->validate($request, [
+            $validator = Validator::make(  $request->all() ,[
                     'first_name' => 'required|between:2,45',
                     'last_name' => 'required|between:2,45',
                     'gender' => 'required|min:1|max:1',
                     'email' => 'required|email|max:45',
-                    'idAdmin_notified' => 'required|int',
                     'idCountry_nationality' => 'required|int',
                     'idCountry_residential' => 'required|int',
                     'about' => 'required|min:2|max:3000',
                     'mobile_number' => 'required|min:2|max:15',
-                    'comments_by_admin' => 'required|min:2|max:1000',
+//                    'comments_by_admin' => 'required|min:2|max:1000',
                 ],
                     [
+                        'first_name.required' => 'First name Required',
                         'first_name.min' => 'First name must be at least 2 char',
-                        'first_name.max' => 'First name maximum 45 char'
+                        'first_name.max' => 'First name maximum 45 char',
+                        'last_name.required' => 'Last name Required',
+                        'last_name.min' => 'Last name must be at least 2 char',
+                        'last_name.max' => 'Last name maximum 45 char',
+                        'gender.required' => 'Gender Required',
+                        'gender.min' => 'Gender must be at least 1 char',
+                        'gender.max' => 'Gender maximum 1 char',
+                        'email.required' => 'Email Required',
+                        'email.email' => 'Email inserted not correct',
+                        'email.max' => 'Email maximum 150 char',
+                        'idCountry_nationality.required' => 'Nationality Required',
+                        'idCountry_nationality.int' => 'Nationality not accepted ',
+                        'idCountry_residential.required' => 'Country residential Required',
+                        'idCountry_residential.int' => 'Country residential not accepted ',
+                        'about.required' => 'About Required',
+                        'about.min' => 'About must be at least 2 char',
+                        'about.max' => 'About maximum 3000 char',
+
+                        'mobile_number.required' => 'Phone number Required',
+                        'mobile_number.min' => 'Phone number must be at least 2 char',
+                        'mobile_number.max' => 'Phone number maximum 3000 char',
+
                     ]
                 );
 
             }else{
                 // validations for insert process
-                $this->validate($request, [
+            $validator = Validator::make(  $request->all() ,[
                     'first_name' => 'required|between:2,45',
                     'last_name' => 'required|between:2,45',
                     'gender' => 'required|min:1|max:1',
                     'email' => 'required|email|max:45|unique:consultant_registrations',
-                    'idAdmin_notified' => 'required|int',
                     'idCountry_nationality' => 'required|int',
                     'idCountry_residential' => 'required|int',
                     'about' => 'required|min:2|max:3000',
                     'mobile_number' => 'required|min:2|max:15',
-                    'comments_by_admin' => 'required|min:2|max:1000',
+//                    'comments_by_admin' => 'required|min:2|max:1000',
                 ],
                     [
+                        'first_name.required' => 'First name Required',
                         'first_name.min' => 'First name must be at least 2 char',
-                        'first_name.max' => 'First name maximum 45 char'
+                        'first_name.max' => 'First name maximum 45 char',
+                        'last_name.required' => 'Last name Required',
+                        'last_name.min' => 'Last name must be at least 2 char',
+                        'last_name.max' => 'Last name maximum 45 char',
+                        'gender.required' => 'Gender Required',
+                        'gender.min' => 'Gender must be at least 1 char',
+                        'gender.max' => 'Gender maximum 1 char',
+                        'email.required' => 'Email Required',
+                        'email.email' => 'Email inserted not correct',
+                        'email.max' => 'Email maximum 150 char',
+                        'email.unique' => 'Email must be unique',
+                        'idCountry_nationality.required' => 'Nationality Required',
+                        'idCountry_nationality.int' => 'Nationality not accepted ',
+                        'idCountry_residential.required' => 'Country residential Required',
+                        'idCountry_residential.int' => 'Country residential not accepted ',
+                        'about.required' => 'About Required',
+                        'about.min' => 'About must be at least 2 char',
+                        'about.max' => 'About maximum 3000 char',
+
+                        'mobile_number.required' => 'Phone number Required',
+                        'mobile_number.min' => 'Phone number must be at least 2 char',
+                        'mobile_number.max' => 'Phone number maximum 3000 char',
                     ]
                 );
 
-
+            return $validator ;
         }
 
 

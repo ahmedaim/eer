@@ -28,4 +28,17 @@ class Consultant extends Model
     public static function open(array $attributes)    {
         return new static($attributes);
     }
+
+    /**
+     *  Get specific Parent User
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class , 'id');
+    }
+
+
+
+
 }

@@ -23,6 +23,7 @@ Route::group(['middleware' => 'cors:api'], function () {
 
 
     Route::resource('/consultant_registration', 'Api\ConsultantRegistrationController');
+
     Route::get('/consultant_registration_insert_fake_data', 'Api\ConsultantRegistrationController@insert_fake_data' );
 
     Route::resource('/customers', 'Api\CustomersController');

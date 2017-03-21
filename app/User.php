@@ -57,5 +57,14 @@ class User extends Authenticatable
         return $this->hasMany(Customer::class , 'idUser') ;
     }
 
+    /**
+     *  Get all consultants related to specific user
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function consultants()
+    {
+        return $this->hasMany(Consultant::class , 'idUser') ;
+    }
+
 
 }
